@@ -14,26 +14,78 @@ angular.module('myApp.gantt.dhxgantt-directive', [])
         gantt.parse(collection, "json");
       }, true);
 
-      //size of gantt
-      $scope.$watch(function() {
-        return $element[0].offsetWidth + "." + $element[0].offsetHeight;
-      }, function() {
-        gantt.setSizes();
-      });
-
       //init gantt
       gantt.config.columns = [
-        {name:"text",       label:"Task name",  width:"250px", tree:true },
-        {name:"start_date", label:"Start time", align: "center" },
-        {name:"end_date",   label:"End date",   align: "center" },
-        {name:"duration",   label:"Duration",   align: "center" },
-        {name:"assigned",   label:"Assigned to", align: "center", width:100,
+        {name:"text",       label:"Task",  width: 300, tree:true },
+        {name:"start_date", label:"Start", align: "center" },
+        {name:"end_date",   label:"Finish",   align: "center" },
+        {name:"assigned",   label:"Assigned to", align: "center",
             template: function(item) {
                 if (!item.users) return "Nobody";
                 return item.users.join(", ");
             }
         }
       ];
+
+      function setScaleConfig(value){
+        switch (value) {
+          case "1":
+            gantt.config.scale_unit = "day";
+            gantt.config.step = 1;
+            gantt.config.date_scale = "%d %M";
+            gantt.config.subscales = [];
+            gantt.config.scale_height = 27;
+            gantt.templates.date_scale = null;
+            break;
+          case "2":
+            var weekScaleTemplate = function(date){
+              var dateToStr = gantt.date.date_to_str("%d %M");
+              var endDate = gantt.date.add(gantt.date.add(date, 1, "week"), -1, "day");
+              return dateToStr(date) + " - " + dateToStr(endDate);
+            };
+
+            gantt.config.scale_unit = "week";
+            gantt.config.step = 1;
+            gantt.templates.date_scale = weekScaleTemplate;
+            gantt.config.subscales = [
+              {unit:"day", step:1, date:"%D" }
+            ];
+            gantt.config.scale_height = 50;
+            break;
+          case "3":
+            gantt.config.scale_unit = "month";
+            gantt.config.date_scale = "%F, %Y";
+            gantt.config.subscales = [
+              {unit:"day", step:1, date:"%j, %D" }
+            ];
+            gantt.config.scale_height = 50;
+            gantt.templates.date_scale = null;
+            break;
+          case "4":
+            gantt.config.scale_unit = "year";
+            gantt.config.step = 1;
+            gantt.config.date_scale = "%Y";
+            gantt.config.min_column_width = 50;
+
+            gantt.config.scale_height = 90;
+            gantt.templates.date_scale = null;
+
+            var monthScaleTemplate = function(date){
+              var dateToStr = gantt.date.date_to_str("%M");
+              var endDate = gantt.date.add(date, 2, "month");
+              return dateToStr(date) + " - " + dateToStr(endDate);
+            };
+
+            gantt.config.subscales = [
+              {unit:"month", step:3, template:monthScaleTemplate},
+              {unit:"month", step:1, date:"%M" }
+            ];
+            break;
+        }
+      }
+
+      setScaleConfig('1');
+
 
       gantt.templates.scale_cell_class = function(date){
             if(date.getDay()==0||date.getDay()==6){
@@ -46,28 +98,31 @@ angular.module('myApp.gantt.dhxgantt-directive', [])
             }
       };
 
+      gantt.templates.grid_row_class = function(start, end, item){
+        return item.$level==0?"gantt_project":""
+      }
+      gantt.templates.task_row_class = function(start, end, item){
+        return item.$level==0?"gantt_project":""
+      }
+      gantt.templates.task_class = function(start, end, item){
+        return item.$level==0?"gantt_project":""
+      }
+      gantt.config.grid_width = 580;
+      gantt.init($element[0]);
 
-      gantt.config.scale_unit = "month";
-      gantt.config.step = 1;
-      gantt.config.date_scale = "%F, %Y";
-      gantt.config.min_column_width = 50;
-      gantt.config.duration_unit = "hour";
+    var func = function(e) {
+      e = e || window.event;
+      var el = e.target || e.srcElement;
+      var value = el.value;
+      setScaleConfig(value);
+      gantt.render();
+    };
 
-      gantt.config.scale_height = 80;
-
-      var weekScaleTemplate = function(date){
-        var dateToStr = gantt.date.date_to_str("%d %M");
-        var endDate = gantt.date.add(gantt.date.add(date, 1, "week"), -1, "day");
-        return dateToStr(date) + " - " + dateToStr(endDate);
-      };
-
-      gantt.config.subscales = [
-        {unit:"week", step:1, template:weekScaleTemplate},
-        {unit:"day", step:1, date:"%D" }
-      ];
-
-        gantt.config.grid_width = 580;
-        gantt.init($element[0]);
+    var els = document.getElementsByName("scale");
+    for (var i = 0; i < els.length; i++) {
+      els[i].onclick = func;
     }
   }
+  }
 });
+
