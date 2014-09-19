@@ -1,0 +1,38 @@
+tryton-angular-gantt
+====================
+
+The nantic module for Angular and Tryton application platform.
+
+
+For add component to Angular application.
+
+File: App.js
+
+    angular.module('myApp', [
+        'myApp.gantt.dhxgantt',
+        'myApp.gantt.gantt_view',
+        'openlabs.angular-tryton'
+    ]).
+
+
+File: Index.html
+
+    <!-- init dhtmlxgannt -->
+    <link rel="stylesheet" href="bower_components/gantt/codebase/skins/dhtmlxgantt_meadow.css">
+    <script src="bower_components/gantt/codebase/dhtmlxgantt.js"></script>
+
+    <script src="app.js"></script>
+    <script src="gantt/gantt.js"></script>
+    <script src="gantt/dhxgantt.js"></script>
+    <script src="gantt/dhxgantt-directive.js"></script>
+    <script src="bower_components/angular-tryton/src/tryton.js"></script>
+
+License
+-------
+
+See LICENSE
+
+Copyright
+---------
+
+See COPYRIGHT

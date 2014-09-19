@@ -1,0 +1,11 @@
+{
+  "name": "nantic-angular-tryton-gantt",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Gantt View for Tryton Tasks with project_resource_plan module",
+  "repository": "https://github.com/NaN-tic/angular-tryton-gantt.git",
+  "license": "GPL",
+  "scripts": {
+    "postinstall": "bower install",
+  }
+}

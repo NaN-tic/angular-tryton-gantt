@@ -1,0 +1,20 @@
+{
+  "name": "nantic-angular-tryton-gantt",
+  "description": "Gantt View for Tryton Tasks with project_resource_plan module",
+  "version": "0.0.0",
+  "homepage": "https://github.com/NaN-tic/angular-tryton-gantt.git",
+  "license": "GPL",
+  "private": true,
+  "dependencies": {
+    "angular": "1.2.x",
+    "angular-route": "1.2.x",
+    "angular-loader": "1.2.x",
+    "angular-mocks": "~1.2.x",
+    "angular-bootstrap": "~0.11.0",
+    "html5-boilerplate": "~4.3.0",
+    "ngstorage": "~0.3.0",
+    "gantt": "3.0.x",
+    "angular-tryton": "https://github.com/openlabs/angular-tryton.git"
+    "angular-tryton-login": "https://github.com/NaN-tic/angular-tryton-login.git"
+  }
+}
