@@ -14,7 +14,7 @@
     "html5-boilerplate": "~4.3.0",
     "ngstorage": "~0.3.0",
     "gantt": "3.0.x",
-    "angular-tryton": "https://github.com/openlabs/angular-tryton.git"
+    "angular-tryton": "https://github.com/openlabs/angular-tryton.git",
     "angular-tryton-login": "https://github.com/NaN-tic/angular-tryton-login.git"
   }
 }
