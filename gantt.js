@@ -31,7 +31,9 @@ angular.module('myApp.gantt.gantt_view', ['ngRoute'])
     $scope._tasks=function(domain){
         var fields=['id', 'work.name','type', 'planned_start_date',
             'planned_end_date', 'effort', 'parent','predecessors',
-            'assigned_employee.rec_name', 'state']
+            'assigned_employee.rec_name', 'state', 'planned_start_date_project',
+            'planned_end_date_project']
+
         var offset=undefined
         var limit=undefined
         var order=undefined
@@ -51,22 +53,26 @@ angular.module('myApp.gantt.gantt_view', ['ngRoute'])
         t.id = task.id;
         t.text = task["work.name"];
 
-        if( task.type == 'milestone' ){
-            t.type = gantt.config.types.milestone
-        } else if( task.type == 'project'){
-            t.type = gantt.config.types.project
-        }
-
-        t.progres = 0;
+        t.progress = 0;
         if(t.state = 'closed'){
-            t.progres=1;
+            t.progress=1;
         }
 
-        t.start_date = task.planned_start_date || new Date();
         t.parent = task.parent;
         if(task.type == 'task'){
+            t.start_date = new Date();
+            console.log( typeof t.start_date)
+            if(task.planned_start_date !== undefined && task.planned_start_date !== null){
+                var d = task.planned_start_date;
+                t.start_date = new Date(d.year, d.month, d.day);
+            }
+
             t.duration = task.effort || 0;
-            t.end_date = task.planned_end_date;
+            if(task.planned_end_date !== undefined && task.planned_end_date !== null){
+                console.log(task.planned_start_date);
+                var d = task.planned_end_date;
+                t.end_date = new Date(d.year, d.month, d.day);
+            }
             t.users = [task["assigned_employee.rec_name"]];
         }
         $scope.tasks.data.push(t);
@@ -77,7 +83,7 @@ angular.module('myApp.gantt.gantt_view', ['ngRoute'])
         l.id = link.id;
         l.source=link.predecessor;
         l.target=link.successor;
-        l.type="1";
+        l.type="0";
         $scope.tasks.links.push(l);
     }
 
